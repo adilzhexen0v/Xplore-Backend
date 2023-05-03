@@ -26,7 +26,7 @@ const UserSchema = mongoose.Schema({
 			message: 'Пожалуйста, введите корректный адрес электронной почты, включая символ @.'
 		}
 	},
-	password: {
+	hashedPassword: {
 		type: String,
 		required: [true, 'Введите свой пароль'],
 		trim: true,

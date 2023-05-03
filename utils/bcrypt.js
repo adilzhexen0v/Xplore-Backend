@@ -8,3 +8,11 @@ export const hashPassword = async (passwd, saltRounds = 10) => {
 		console.log(error);
 	}
 };
+
+export const isValidPassword = async (passwordFromRequest, hashedPassword) => {
+	try {
+		return await bcrypt.compare(passwordFromRequest, hashedPassword);
+	} catch (error) {
+		console.log(object);
+	}
+};
