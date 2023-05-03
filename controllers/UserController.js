@@ -5,7 +5,8 @@ import { hashPassword, isValidPassword } from '../utils/bcrypt.js';
 import {
 	InternalServerError,
 	BadRequestError,
-	UnauthenticatedError
+	UnauthenticatedError,
+	NotFoundError
 } from '../errors/CustomErrors.js';
 import { createToken } from '../utils/jwt.js';
 
@@ -46,7 +47,6 @@ export const login = async (req, res) => {
 		}
 
 		const user = await UserModel.findOne({ email });
-
 		if (!user) {
 			return UnauthenticatedError(res, 'Неверный e-mail или пароль');
 		}
@@ -58,6 +58,63 @@ export const login = async (req, res) => {
 		const token = createToken(user._id);
 
 		res.status(StatusCodes.OK).json({ user, token });
+	} catch (error) {
+		InternalServerError(res, error);
+	}
+};
+
+export const getMe = async (req, res) => {
+	try {
+		const id = req.userId;
+		if (!id) {
+			return BadRequestError(res, 'Не найден id');
+		}
+
+		const user = await UserModel.findById(id).select('-hashedPassword');
+		if (!user) {
+			return NotFoundError(res, 'Пользователь не найден');
+		}
+
+		res.status(StatusCodes.OK).json(user);
+	} catch (error) {
+		InternalServerError(res, error);
+	}
+};
+
+export const getUser = async (req, res) => {
+	try {
+		const { id } = req.params;
+		if (!id) {
+			return BadRequestError(res, 'Не найден id');
+		}
+
+		const user = await UserModel.findById(id).select('-hashedPassword');
+		if (!user) {
+			return NotFoundError(res, 'Пользователь не найден');
+		}
+
+		res.status(StatusCodes.OK).json(user);
+	} catch (error) {
+		InternalServerError(res, error);
+	}
+};
+
+export const updateUserData = async (req, res) => {
+	try {
+		const { firstName, lastName, email, password } = req.body;
+		if (!firstName || !lastName || !email) {
+			return BadRequestError(res, 'Заполните все поля');
+		}
+
+		await UserModel.findByIdAndUpdate(req.userId, {
+			firstName,
+			lastName,
+			email,
+			password
+		});
+		res.status(StatusCodes.OK).json({
+			message: 'Данные пользователя успешно обновлены'
+		});
 	} catch (error) {
 		InternalServerError(res, error);
 	}

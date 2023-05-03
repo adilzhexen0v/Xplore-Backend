@@ -13,8 +13,21 @@ export const BadRequestError = async (res, message) => {
 		.json({ error: message || 'Bad request' });
 };
 
+export const UnauthorizedUser = async (res, message) => {
+	return res
+		.status(StatusCodes.FORBIDDEN)
+		.json({ error: message || 'Unauthorized' });
+};
+4;
+
 export const UnauthenticatedError = async (res, message) => {
 	return res
 		.status(StatusCodes.UNAUTHORIZED)
 		.json({ error: message || 'Unauthenticated' });
+};
+
+export const NotFoundError = async (res, message) => {
+	return res
+		.status(StatusCodes.NOT_FOUND)
+		.json({ error: message || 'Not found' });
 };
