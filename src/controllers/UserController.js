@@ -1,14 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 
-import UserModel from '../models/UserModel.js';
-import { hashPassword, isValidPassword } from '../utils/bcrypt.js';
+import {
+	createUser,
+	getUserByEmail,
+	getUserById,
+	updateDataOfUser
+} from '../repositories/UserRepository.js';
 import {
 	InternalServerError,
 	BadRequestError,
 	UnauthenticatedError,
-	NotFoundError
-} from '../errors/CustomErrors.js';
-import { createToken } from '../utils/jwt.js';
+	NotFoundError,
+	ConflictError
+} from '../../errors/CustomErrors.js';
+import { hashPassword, isValidPassword } from '../../utils/bcrypt.js';
+import { createToken } from '../../utils/jwt.js';
 
 export const register = async (req, res) => {
 	try {
@@ -17,19 +23,19 @@ export const register = async (req, res) => {
 			return BadRequestError(res, 'Заполните все поля');
 		}
 
-		const emailAlreadyExists = await UserModel.findOne({ email });
+		const emailAlreadyExists = await getUserByEmail(email);
 		if (emailAlreadyExists) {
-			return BadRequestError(res, 'Данная электронная почта занята');
+			return ConflictError(res, 'Данная электронная почта занята');
 		}
 
 		const hashedPassword = await hashPassword(password);
-		const newUserDocument = UserModel({
+		const userData = {
 			firstName,
 			lastName,
 			email,
 			hashedPassword
-		});
-		const newUser = await newUserDocument.save();
+		};
+		const newUser = await createUser(userData);
 
 		const token = createToken(newUser._id);
 
@@ -46,7 +52,7 @@ export const login = async (req, res) => {
 			return BadRequestError(res, 'Заполните все поля');
 		}
 
-		const user = await UserModel.findOne({ email });
+		const user = await getUserByEmail(email);
 		if (!user) {
 			return UnauthenticatedError(res, 'Неверный e-mail или пароль');
 		}
@@ -69,8 +75,7 @@ export const getMe = async (req, res) => {
 		if (!id) {
 			return BadRequestError(res, 'Не найден id');
 		}
-
-		const user = await UserModel.findById(id).select('-hashedPassword');
+		const user = await getUserById(id);
 		if (!user) {
 			return NotFoundError(res, 'Пользователь не найден');
 		}
@@ -88,7 +93,7 @@ export const getUser = async (req, res) => {
 			return BadRequestError(res, 'Не найден id');
 		}
 
-		const user = await UserModel.findById(id).select('-hashedPassword');
+		const user = await getUserById(id);
 		if (!user) {
 			return NotFoundError(res, 'Пользователь не найден');
 		}
@@ -106,12 +111,14 @@ export const updateUserData = async (req, res) => {
 			return BadRequestError(res, 'Заполните все поля');
 		}
 
-		await UserModel.findByIdAndUpdate(req.userId, {
+		const userData = {
 			firstName,
 			lastName,
 			email,
 			password
-		});
+		};
+
+		await updateDataOfUser(req.userId, userData);
 		res.status(StatusCodes.OK).json({
 			message: 'Данные пользователя успешно обновлены'
 		});
