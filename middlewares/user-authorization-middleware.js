@@ -1,5 +1,5 @@
 import { verifyToken } from '../utils/jwt.js';
-import { UnauthorizedUser } from '../errors/CustomErrors.js';
+import { UnauthorizedUser } from '../errors/errors.js';
 
 export default (req, res, next) => {
 	const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');

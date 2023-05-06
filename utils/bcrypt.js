@@ -1,18 +1,20 @@
-import bcrypt from 'bcrypt';
+import { genSalt, hash, compare } from 'bcrypt';
+
+import logger from './logger.js';
 
 export const hashPassword = async (passwd, saltRounds = 10) => {
 	try {
-		const salt = await bcrypt.genSalt(saltRounds);
-		return await bcrypt.hash(passwd, salt);
+		const salt = await genSalt(saltRounds);
+		return await hash(passwd, salt);
 	} catch (error) {
-		console.log(error);
+		logger.error(error);
 	}
 };
 
 export const isValidPassword = async (passwordFromRequest, hashedPassword) => {
 	try {
-		return await bcrypt.compare(passwordFromRequest, hashedPassword);
+		return await compare(passwordFromRequest, hashedPassword);
 	} catch (error) {
-		console.log(object);
+		logger.error(error);
 	}
 };

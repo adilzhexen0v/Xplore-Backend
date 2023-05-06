@@ -1,8 +1,8 @@
 import express from 'express';
 
-import connectDatabase from './db/DatabaseConnect.js';
-import UserRoutes from './src/routes/UserRoutes.js';
-import morganMiddleware from './middlewares/MorganMiddleware.js';
+import connectDatabase from './db/database-connect.js';
+import userRoutes from './src/routes/user-routes.js';
+import morganMiddleware from './middlewares/morgan-middleware.js';
 import logger from './utils/logger.js';
 import 'dotenv/config';
 
@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use(morganMiddleware);
 
-app.use('/user', UserRoutes);
+app.use('/user', userRoutes);
 
 const port = process.env.PORT || 4000;
 const start = async () => {

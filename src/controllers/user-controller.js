@@ -5,23 +5,20 @@ import {
 	getUserByEmail,
 	getUserById,
 	updateDataOfUser
-} from '../repositories/UserRepository.js';
+} from '../repositories/user-repository.js';
 import {
 	InternalServerError,
 	BadRequestError,
 	UnauthenticatedError,
 	NotFoundError,
 	ConflictError
-} from '../../errors/CustomErrors.js';
+} from '../../errors/errors.js';
 import { hashPassword, isValidPassword } from '../../utils/bcrypt.js';
 import { createToken } from '../../utils/jwt.js';
 
 export const register = async (req, res) => {
 	try {
 		const { firstName, lastName, email, password } = req.body;
-		if (!firstName || !lastName || !email || !password) {
-			return BadRequestError(res, 'Заполните все поля');
-		}
 
 		const emailAlreadyExists = await getUserByEmail(email);
 		if (emailAlreadyExists) {

@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import logger from '../utils/logger.js';
 
 export const InternalServerError = async (res, error) => {
-	logger.error(message);
+	logger.error(error.message);
 	return res
 		.status(StatusCodes.INTERNAL_SERVER_ERROR)
 		.json({ error: error.message });
