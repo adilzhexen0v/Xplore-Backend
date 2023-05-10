@@ -1,77 +1,38 @@
-import validator from 'validator';
-import { BadRequestError } from '../../errors/errors.js';
+import {
+	CustomValidator,
+	createValidatorMiddleware
+} from './validator-general-settings.js';
+import 'dotenv/config';
 
-export const registerValidator = (req, res, next) => {
-	const errors = [];
-	const { firstName, lastName, email, password } = req.body;
+const PASSWORD_PATTERN = process.env.VALIDATOR_PASSWORD_PATTERN;
 
-	if (!firstName || !lastName || !email || !password) {
-		errors.push('Заполните все поля');
-	}
+const firstName = new CustomValidator('firstName')
+	.string()
+	.length()
+	.getValidator();
+const lastName = new CustomValidator('lastName')
+	.string()
+	.length()
+	.getValidator();
+const email = new CustomValidator('email').email().length().getValidator();
+const password = new CustomValidator('password')
+	.string()
+	.length(8, 30)
+	.matches(
+		PASSWORD_PATTERN,
+		'Пароль должен быть не менее 8 символов и содержать как минимум одну заглавную букву, одну строчную букву, одну цифру и один специальный символ'
+	)
+	.getValidator();
 
-	if (!validator.isEmail(email)) {
-		errors.push(
-			'Пожалуйста, введите корректный адрес электронной почты, включая символ @'
-		);
-	}
-
-	if (!validator.isStrongPassword(password, { minLength: 6 })) {
-		errors.push(
-			'Пароль должен быть не менее 8 символов и содержать как минимум одну заглавную букву, одну строчную букву, одну цифру и один специальный символ'
-		);
-	}
-
-	if (errors.length > 0) {
-		return BadRequestError(res, errors);
-	}
-
-	next();
-};
-
-export const loginValidator = (req, res, next) => {
-	const errors = [];
-	const { email, password } = req.body;
-
-	if (!email || !password) {
-		errors.push('Заполните все поля');
-	}
-
-	if (!validator.isEmail(email)) {
-		errors.push(
-			'Пожалуйста, введите корректный адрес электронной почты, включая символ @'
-		);
-	}
-
-	if (!validator.isStrongPassword(password, { minLength: 6 })) {
-		errors.push(
-			'Пароль должен быть не менее 8 символов и содержать как минимум одну заглавную букву, одну строчную букву, одну цифру и один специальный символ'
-		);
-	}
-
-	if (errors.length > 0) {
-		return BadRequestError(res, errors);
-	}
-
-	next();
-};
-
-export const updateValidator = (req, res, next) => {
-	const errors = [];
-	const { firstName, lastName, email } = req.body;
-
-	if (!firstName || !lastName || !email) {
-		errors.push('Заполните все поля');
-	}
-
-	if (!validator.isEmail(email)) {
-		errors.push(
-			'Пожалуйста, введите корректный адрес электронной почты, включая символ @'
-		);
-	}
-
-	if (errors.length > 0) {
-		return BadRequestError(res, errors);
-	}
-
-	next();
-};
+export const registerValidator = createValidatorMiddleware([
+	firstName,
+	lastName,
+	email,
+	password
+]);
+export const loginValidator = createValidatorMiddleware([email, password]);
+export const updateValidator = createValidatorMiddleware([
+	firstName,
+	lastName,
+	email
+]);
