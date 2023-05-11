@@ -1,5 +1,5 @@
 import { verifyToken } from '../utils/jwt.js';
-import { UnauthorizedUser } from '../errors/errors.js';
+import { UnauthorizedError } from '../errors/errors.js';
 
 export default (req, res, next) => {
 	const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
@@ -9,9 +9,9 @@ export default (req, res, next) => {
 			req.userId = decodedToken._id;
 			next();
 		} catch (error) {
-			return UnauthorizedUser(res, 'Не получилось проверить токен');
+			return UnauthorizedError(res, 'Не получилось проверить токен');
 		}
 	} else {
-		return UnauthorizedUser(res, 'Нет доступа');
+		return UnauthorizedError(res, 'Нет доступа');
 	}
 };

@@ -24,6 +24,8 @@ const password = new CustomValidator('password')
 	)
 	.getValidator();
 
+const code = new CustomValidator('code').string().length(6, 6).getValidator();
+
 export const registerValidator = createValidatorMiddleware([
 	firstName,
 	lastName,
@@ -36,3 +38,4 @@ export const updateValidator = createValidatorMiddleware([
 	lastName,
 	email
 ]);
+export const activateValidator = createValidatorMiddleware([code]);

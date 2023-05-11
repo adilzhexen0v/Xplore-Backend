@@ -16,7 +16,7 @@ export const BadRequestError = async (res, message) => {
 		.json({ error: message || 'Bad request' });
 };
 
-export const UnauthorizedUser = async (res, message) => {
+export const UnauthorizedError = async (res, message) => {
 	logger.warn(message);
 	return res
 		.status(StatusCodes.FORBIDDEN)

@@ -1,5 +1,22 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
+import { generateActivationCode } from '../../utils/activation-code.js';
+import 'dotenv/config';
+
+const ActivationCodeSchema = mongoose.Schema(
+	{
+		code: {
+			type: String,
+			required: true,
+			trim: true,
+			maxlength: 6
+		},
+		expiresIn: {
+			type: Number,
+			required: true
+		}
+	},
+	{ _id: false, timestamps: false }
+);
 
 const UserSchema = mongoose.Schema({
 	firstName: {
@@ -20,11 +37,7 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		required: [true, 'Введите свой e-mail'],
 		trim: true,
-		unique: true,
-		validate: {
-			validator: validator.isEmail,
-			message: 'Пожалуйста, введите корректный адрес электронной почты, включая символ @.'
-		}
+		unique: true
 	},
 	hashedPassword: {
 		type: String,
@@ -37,6 +50,16 @@ const UserSchema = mongoose.Schema({
 		required: true,
 		min: 0,
 		default: 0
+	},
+	isActivated: {
+		type: Boolean,
+		required: true,
+		default: false
+	},
+	activationCode: {
+		type: ActivationCodeSchema,
+		required: true,
+		default: generateActivationCode()
 	}
 });
 

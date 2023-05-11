@@ -5,12 +5,15 @@ import {
 	register,
 	login,
 	getMe,
-	updateUserData
+	updateUserData,
+	regenerateActivationCode,
+	activateAccount
 } from '../controllers/user-controller.js';
 import {
 	registerValidator,
 	loginValidator,
-	updateValidator
+	updateValidator,
+	activateValidator
 } from '../validators/user-validator.js';
 
 const router = Router();
@@ -20,6 +23,12 @@ router.route('/login').post(loginValidator, login);
 router
 	.route('/me')
 	.get(UserAuthorizationMiddleware, getMe)
-	.patch(UserAuthorizationMiddleware, updateUserData);
+	.patch(UserAuthorizationMiddleware, updateValidator, updateUserData);
+router
+	.route('/regenerate')
+	.patch(UserAuthorizationMiddleware, regenerateActivationCode);
+router
+	.route('/activate')
+	.patch(UserAuthorizationMiddleware, activateValidator, activateAccount);
 
 export default router;
