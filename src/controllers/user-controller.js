@@ -159,7 +159,10 @@ export const activateAccount = async (req, res) => {
 		if (errorCode === StatusCodes.BAD_REQUEST) {
 			return BadRequestError(res, 'Неверный код активации');
 		} else if (errorCode === StatusCodes.FORBIDDEN) {
-			return UnauthorizedError(res, 'Время доступа кода активации истекло');
+			return UnauthorizedError(
+				res,
+				'Время доступа кода активации истекло'
+			);
 		}
 
 		res.status(StatusCodes.OK).json({

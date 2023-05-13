@@ -6,9 +6,9 @@ export const generateActivationCode = (min = 100000, max = 999999) => {
 	};
 };
 
-export const createEmailHTML = code => {
+export const createActivationCodeEmailHTML = code => {
 	return `
           <h1>Ваш код активации: </h1>
-          <pre style="font-size: 48px; letter-spacing: 2">${code}</pre>
+          <pre style="font-size: 48px; letter-spacing: 12px;">${code}</pre>
      `;
 };

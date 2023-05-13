@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import { generateActivationCode } from '../../utils/activation-code.js';
-import 'dotenv/config';
 
 const ActivationCodeSchema = mongoose.Schema(
 	{

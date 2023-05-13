@@ -49,6 +49,13 @@ export class CustomValidator {
 		return this;
 	}
 
+	objectId() {
+		this.validator = this.validator
+			.isMongoId()
+			.withMessage('Это значение должно быть ObjectID');
+		return this;
+	}
+
 	matches(pattern, message) {
 		this.validator = this.validator.matches(pattern).withMessage(message);
 		return this;

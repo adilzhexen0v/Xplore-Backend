@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 import logger from '../utils/logger.js';
 import 'dotenv/config';
-import { createEmailHTML } from '../utils/activation-code.js';
+import { createActivationCodeEmailHTML } from '../utils/activation-code.js';
 
 const EMAIL = process.env.NODEMAILER_MAIL;
 const PASSWORD = process.env.NODEMAILER_PASSWORD;
@@ -23,7 +23,7 @@ export const sendActivationCode = async (code, email) => {
 			from: EMAIL,
 			to: email,
 			subject: 'Активация аккаунта ✔',
-			html: createEmailHTML(code)
+			html: createActivationCodeEmailHTML(code)
 		};
 		const info = await transporter.sendMail(mailOptions);
 		logger.info(info);
