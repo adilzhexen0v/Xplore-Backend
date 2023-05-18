@@ -10,14 +10,15 @@ import {
 	createCategoryValidator,
 	updateCategoryValidator
 } from '../validators/category-validator.js';
+import { checkIdParamValidator } from '../validators/validator-general-settings.js';
 
 const router = Router();
 
 router.route('/create').post(createCategoryValidator, createNewCategoryOfWords);
 router
 	.route('/:id')
-	.get(getCategoryOfWords)
+	.get(checkIdParamValidator, getCategoryOfWords)
 	.patch(updateCategoryValidator, updateCategoryOfWords)
-	.delete(deleteCategoryOfWords);
+	.delete(checkIdParamValidator, deleteCategoryOfWords);
 
 export default router;

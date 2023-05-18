@@ -1,21 +1,21 @@
 import {
-	CustomValidator,
+	CustomBodyValidator,
 	createValidatorMiddleware
 } from './validator-general-settings.js';
 import 'dotenv/config';
 
 const PASSWORD_PATTERN = process.env.VALIDATOR_PASSWORD_PATTERN;
 
-const firstName = new CustomValidator('firstName')
+const firstName = new CustomBodyValidator('firstName')
 	.string()
 	.length()
 	.getValidator();
-const lastName = new CustomValidator('lastName')
+const lastName = new CustomBodyValidator('lastName')
 	.string()
 	.length()
 	.getValidator();
-const email = new CustomValidator('email').email().length().getValidator();
-const password = new CustomValidator('password')
+const email = new CustomBodyValidator('email').email().length().getValidator();
+const password = new CustomBodyValidator('password')
 	.string()
 	.length(8, 30)
 	.matches(
@@ -24,7 +24,10 @@ const password = new CustomValidator('password')
 	)
 	.getValidator();
 
-const code = new CustomValidator('code').string().length(6, 6).getValidator();
+const code = new CustomBodyValidator('code')
+	.string()
+	.length(6, 6)
+	.getValidator();
 
 export const registerValidator = createValidatorMiddleware([
 	firstName,

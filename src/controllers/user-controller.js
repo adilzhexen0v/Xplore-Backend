@@ -89,9 +89,6 @@ export const getMe = async (req, res) => {
 export const getUser = async (req, res) => {
 	try {
 		const { id } = req.params;
-		if (!id) {
-			return BadRequestError(res, 'Не найден id');
-		}
 
 		const user = await getUserById(id);
 		if (!user) {

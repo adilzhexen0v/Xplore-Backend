@@ -38,9 +38,6 @@ export const createNewWord = async (req, res) => {
 
 export const getWord = async (req, res) => {
 	const { id } = req.params;
-	if (!id) {
-		return BadRequestError(res, 'Не найден id');
-	}
 
 	const word = await getWordById(id);
 	if (!word) {
@@ -69,9 +66,6 @@ export const updateWord = async (req, res) => {
 export const deleteWord = async (req, res) => {
 	try {
 		const { id } = req.params;
-		if (!id) {
-			return BadRequestError(res, 'Не найден id');
-		}
 
 		await deleteWordById(id);
 		res.status(StatusCodes.OK).json({

@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { param, body, validationResult } from 'express-validator';
 
 import { BadRequestError } from '../../errors/errors.js';
 import 'dotenv/config';
@@ -16,7 +16,7 @@ export const createValidatorMiddleware = array => {
 	]);
 };
 
-export class CustomValidator {
+export class CustomBodyValidator {
 	constructor(fieldName) {
 		this.validator = body(fieldName)
 			.exists({ checkFalsy: true })
@@ -65,3 +65,18 @@ export class CustomValidator {
 		return this.validator;
 	}
 }
+
+export class CustomParamValidator {
+	constructor(fieldName) {
+		this.validator = param(fieldName)
+			.isMongoId()
+			.withMessage('Это значение должно быть ObjectID');
+		this.fieldName = fieldName;
+	}
+	getValidator() {
+		return this.validator;
+	}
+}
+
+const id = new CustomParamValidator('id').getValidator();
+export const checkIdParamValidator = createValidatorMiddleware([id]);

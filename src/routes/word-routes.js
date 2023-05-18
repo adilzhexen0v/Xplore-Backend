@@ -6,15 +6,19 @@ import {
 	deleteWord,
 	getWord
 } from '../controllers/word-controller.js';
-import { createOrUpdateWordValidator } from '../validators/word-validator.js';
+import {
+	createWordValidator,
+	updateWordValidator
+} from '../validators/word-validator.js';
+import { checkIdParamValidator } from '../validators/validator-general-settings.js';
 
 const router = Router();
 
-router.route('/add').post(createOrUpdateWordValidator, createNewWord);
+router.route('/add').post(createWordValidator, createNewWord);
 router
 	.route('/:id')
-	.get(getWord)
-	.patch(createOrUpdateWordValidator, updateWord)
-	.delete(deleteWord);
+	.get(checkIdParamValidator, getWord)
+	.patch(updateWordValidator, updateWord)
+	.delete(checkIdParamValidator, deleteWord);
 
 export default router;

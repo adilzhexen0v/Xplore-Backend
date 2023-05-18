@@ -1,16 +1,26 @@
 import {
-	CustomValidator,
+	CustomBodyValidator,
 	createValidatorMiddleware
 } from './validator-general-settings.js';
 
-const categoryId = new CustomValidator('categoryId').objectId().getValidator();
-const eng = new CustomValidator('eng').string().getValidator();
-const kaz = new CustomValidator('kaz').string().getValidator();
-const transcription = new CustomValidator('transcription')
+const categoryId = new CustomBodyValidator('categoryId')
+	.objectId()
+	.getValidator();
+const eng = new CustomBodyValidator('eng').string().getValidator();
+const kaz = new CustomBodyValidator('kaz').string().getValidator();
+const transcription = new CustomBodyValidator('transcription')
 	.string()
 	.getValidator();
 
-export const createOrUpdateWordValidator = createValidatorMiddleware([
+export const createWordValidator = createValidatorMiddleware([
+	categoryId,
+	eng,
+	kaz,
+	transcription
+]);
+
+export const updateWordValidator = createValidatorMiddleware([
+	wordId,
 	categoryId,
 	eng,
 	kaz,
