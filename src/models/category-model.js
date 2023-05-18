@@ -15,6 +15,7 @@ const CategorySchema = mongoose.Schema(
 		words: {
 			type: [mongoose.Schema.Types.ObjectId],
 			required: true,
+			ref: 'Word',
 			default: []
 		}
 	},

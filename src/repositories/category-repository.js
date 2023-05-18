@@ -11,7 +11,9 @@ export const checkExistenseOfCategory = async (eng, kaz) => {
 };
 
 export const getCategoryById = async id => {
-	return await CategoryModel.findById(id);
+	return await CategoryModel.findById(id)
+		.populate('words', '-categoryId -__v')
+		.exec();
 };
 
 export const updateCategoryById = async (id, data) => {

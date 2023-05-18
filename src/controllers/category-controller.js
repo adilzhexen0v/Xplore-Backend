@@ -17,11 +17,7 @@ export const createNewCategoryOfWords = async (req, res) => {
 	try {
 		const { eng, kaz } = req.body;
 
-		const categoryAlreadyExists = await checkExistenseOfCategory(
-			eng,
-			kaz
-		);
-		if (categoryAlreadyExists) {
+		if (await checkExistenseOfCategory(eng, kaz)) {
 			return ConflictError(res, 'Такая категория уже существует');
 		}
 

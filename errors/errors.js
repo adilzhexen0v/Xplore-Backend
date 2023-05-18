@@ -2,21 +2,21 @@ import { StatusCodes } from 'http-status-codes';
 
 import logger from '../utils/logger.js';
 
-export const InternalServerError = async (res, error) => {
+export const InternalServerError = (res, error) => {
 	logger.error(error.message);
 	return res
 		.status(StatusCodes.INTERNAL_SERVER_ERROR)
 		.json({ error: error.message });
 };
 
-export const BadRequestError = async (res, message) => {
+export const BadRequestError = (res, message) => {
 	logger.warn(message);
 	return res
 		.status(StatusCodes.BAD_REQUEST)
 		.json({ error: message || 'Bad request' });
 };
 
-export const UnauthorizedError = async (res, message) => {
+export const UnauthorizedError = (res, message) => {
 	logger.warn(message);
 	return res
 		.status(StatusCodes.FORBIDDEN)
@@ -24,21 +24,21 @@ export const UnauthorizedError = async (res, message) => {
 };
 4;
 
-export const UnauthenticatedError = async (res, message) => {
+export const UnauthenticatedError = (res, message) => {
 	logger.warn(message);
 	return res
 		.status(StatusCodes.UNAUTHORIZED)
 		.json({ error: message || 'Unauthenticated' });
 };
 
-export const NotFoundError = async (res, message) => {
+export const NotFoundError = (res, message) => {
 	logger.warn(message);
 	return res
 		.status(StatusCodes.NOT_FOUND)
 		.json({ error: message || 'Not found' });
 };
 
-export const ConflictError = async (res, message) => {
+export const ConflictError = (res, message) => {
 	logger.warn(message);
 	return res
 		.status(StatusCodes.CONFLICT)

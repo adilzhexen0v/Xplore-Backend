@@ -6,6 +6,7 @@ import connectDatabase from './db/database-connect.js';
 
 import userRoutes from './src/routes/user-routes.js';
 import categoryRoutes from './src/routes/category-routes.js';
+import wordRoutes from './src/routes/word-routes.js';
 
 import 'dotenv/config';
 
@@ -16,6 +17,7 @@ app.use(morganMiddleware);
 
 app.use('/user', userRoutes);
 app.use('/category', categoryRoutes);
+app.use('/word', wordRoutes);
 
 const port = process.env.PORT || 4000;
 const start = async () => {
